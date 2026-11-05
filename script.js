@@ -7,6 +7,9 @@
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var canAnimate = !reduce && 'IntersectionObserver' in window;
 
+  // Com movimento reduzido, o showreel fica parado no poster
+  if (reduce) document.querySelectorAll('video[autoplay]').forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
+
   var ano = document.getElementById('ano');
   if (ano) ano.textContent = new Date().getFullYear();
 
