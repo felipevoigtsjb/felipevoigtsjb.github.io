@@ -70,7 +70,6 @@ h1,h2,h3,p{margin:0}
 .hero__in{position:relative;display:flex;flex-direction:column;gap:32px;padding-top:clamp(64px,9vw,112px);padding-bottom:clamp(56px,8vw,96px)}
 .chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
 .chips li{font-size:13px;font-weight:500;padding:8px 14px;border-radius:999px;border:1px solid var(--line3);color:var(--soft)}
-.hero__title{font-family:var(--display);font-weight:800;font-size:clamp(60px,13vw,196px);line-height:.88;letter-spacing:-.04em}
 .hero__sub{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px 48px}
 .hero__lead{font-family:var(--display);font-weight:600;font-size:clamp(24px,3vw,40px);line-height:1.12;letter-spacing:-.02em;max-width:720px}
 .hero__sub .muted{max-width:400px}
@@ -109,7 +108,7 @@ h1,h2,h3,p{margin:0}
 .case--offset{margin-top:clamp(0px,8vw,120px)}
 .case__media{position:relative;border-radius:24px;overflow:hidden;background:var(--surface2);border:1px solid var(--line2)}
 .case__img{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;color:var(--muted2);font-size:15px;background:radial-gradient(70% 90% at 50% 110%,var(--glow),transparent 70%);transition:transform .9s var(--ease)}
-.case__img img{width:100%;height:100%;object-fit:cover}
+.case__img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:left top}
 .case:hover .case__img{transform:scale(1.05)}
 .case__badge{position:absolute;left:20px;top:20px;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;background:var(--accent);color:var(--on-accent)}
 .case__view{position:absolute;right:20px;bottom:20px;font-size:14px;font-weight:600;padding:12px 18px;border-radius:999px;background:var(--text);color:var(--bg);opacity:0;transform:translateY(10px) scale(.9);transition:opacity .35s,transform .35s var(--ease)}

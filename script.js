@@ -1,7 +1,7 @@
 /* FC Soluções Tecnológicas — interações do site */
 (function () {
   // Número do WhatsApp que recebe o formulário (só dígitos, com DDI e DDD, ex.: 5548999999999)
-  var WHATSAPP = '[SEU_NUMERO]';
+  var WHATSAPP = '5548999964841';
 
   var root = document.documentElement;
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
