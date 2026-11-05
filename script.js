@@ -7,6 +7,11 @@
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var canAnimate = !reduce && 'IntersectionObserver' in window;
 
+  // No celular o showreel usa a versão 4:5 (o <source media> escolhe o vídeo; aqui troca o poster)
+  if (window.matchMedia && window.matchMedia('(max-width: 760px)').matches) {
+    document.querySelectorAll('video[data-poster-mobile]').forEach(function (v) { v.poster = v.getAttribute('data-poster-mobile'); });
+  }
+
   // Com movimento reduzido, o showreel fica parado no poster
   if (reduce) document.querySelectorAll('video[autoplay]').forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
 
