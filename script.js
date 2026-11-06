@@ -74,14 +74,16 @@
   window.addEventListener('resize', requestTick);
   onScroll();
 
-  // Brilho do hero segue o mouse (as variáveis vão só no brilho, para não recalcular o hero inteiro)
+  // Brilho do hero segue o mouse: move o círculo só com transform (não redesenha o hero)
   var hero = document.querySelector('.hero');
   var spot = hero && hero.querySelector('.hero__spot');
   if (spot && canAnimate) {
+    var placeSpot = function (x, y) { spot.style.transform = 'translate(' + x + 'px,' + y + 'px)'; };
+    var hr = hero.getBoundingClientRect();
+    placeSpot(hr.width * 0.7, hr.height * 0.3);
     hero.addEventListener('mousemove', function (e) {
       var r = hero.getBoundingClientRect();
-      spot.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-      spot.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      placeSpot(e.clientX - r.left, e.clientY - r.top);
     });
   }
 

@@ -10,13 +10,16 @@
   --display:'Inter Tight', system-ui, sans-serif;
   --body:'Inter', system-ui, sans-serif;
   --ease:cubic-bezier(.2,.7,.2,1);
+  color-scheme:dark; /* barras de rolagem e preenchimento automático no tema escuro */
 }
 *,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:80px}
+html{scroll-behavior:smooth;scroll-padding-top:80px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.5;overflow-x:clip;-webkit-font-smoothing:antialiased}
 img,video{max-width:100%;display:block}
 a{color:var(--accent-soft)}a:hover{color:#fff}
-a,button{-webkit-tap-highlight-color:transparent}
+a,button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+/* Texto de botão é controle, não conteúdo: segurar o dedo não deve selecioná-lo */
+.btn,.pill{-webkit-user-select:none;user-select:none}
 h1,h2,h3,p{margin:0}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
 .skip{position:absolute;left:-9999px;top:8px;background:var(--accent);color:var(--on-accent);padding:12px 16px;border-radius:8px;z-index:100}
@@ -36,10 +39,12 @@ h1,h2,h3,p{margin:0}
 .h2--xl{font-size:clamp(36px,5.4vw,72px);line-height:1.02;letter-spacing:-.03em}
 
 /* Botões e links */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;padding:18px 28px;border-radius:12px;font-weight:600;font-size:16px;font-family:var(--body);border:0;cursor:pointer;transition:translate .2s var(--ease),scale .16s var(--ease),box-shadow .25s}
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;padding:18px 28px;border-radius:12px;font-weight:600;font-size:16px;font-family:var(--body);border:0;cursor:pointer;transition:translate .2s var(--ease),scale .16s var(--ease)}
 .btn:active{scale:.97}
 .btn--accent{background:var(--accent);color:var(--on-accent)}
 .btn--accent:hover{color:var(--on-accent)}
+/* Brilho do hover numa camada própria: anima só opacity, sem redesenhar a sombra a cada quadro */
+.btn--accent::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 10px 30px var(--glow);opacity:0;transition:opacity .25s var(--ease);pointer-events:none}
 .btn--ghost{border:1px solid var(--line3);color:var(--text)}
 .btn--sm{padding:12px 20px;border-radius:10px;font-size:14px}
 .btn--block{width:100%}
@@ -53,11 +58,11 @@ h1,h2,h3,p{margin:0}
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text)}
 .brand:hover{color:var(--text)}
 .brand__txt{display:flex;flex-direction:column;gap:4px;line-height:1}
-.brand__txt strong{font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:-.01em}
+.brand__txt strong{font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
 .brand__txt small{font-family:var(--display);font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.3em;color:var(--soft)}
 .nav{display:flex;flex-wrap:wrap;align-items:center;gap:4px}
 .nav__l{color:var(--soft);text-decoration:none;padding:12px 14px;font-size:14px}
-.nav .btn{margin-left:8px}
+.nav .btn{margin-left:8px;white-space:nowrap}
 
 /* Hero */
 .hero{position:relative;overflow:hidden}
@@ -66,7 +71,9 @@ h1,h2,h3,p{margin:0}
 .hero__stars,.hero__stars2{position:absolute;inset:0;pointer-events:none}
 .hero__stars{background-image:radial-gradient(1.5px 1.5px at 12% 22%,#fff,transparent),radial-gradient(1px 1px at 28% 68%,#fff,transparent),radial-gradient(1.5px 1.5px at 46% 14%,#fff,transparent),radial-gradient(1px 1px at 63% 52%,#fff,transparent),radial-gradient(2px 2px at 81% 28%,#fff,transparent),radial-gradient(1px 1px at 92% 74%,#fff,transparent),radial-gradient(1.5px 1.5px at 6% 84%,#fff,transparent),radial-gradient(1px 1px at 38% 88%,#fff,transparent)}
 .hero__stars2{background-image:radial-gradient(1px 1px at 18% 44%,#D4D4D4,transparent),radial-gradient(1.5px 1.5px at 34% 30%,#D4D4D4,transparent),radial-gradient(1px 1px at 55% 78%,#D4D4D4,transparent),radial-gradient(2px 2px at 72% 10%,#D4D4D4,transparent),radial-gradient(1px 1px at 86% 56%,#D4D4D4,transparent),radial-gradient(1.5px 1.5px at 96% 18%,#D4D4D4,transparent)}
-.hero__spot{position:absolute;inset:0;pointer-events:none;background:radial-gradient(460px circle at var(--mx,70%) var(--my,30%),var(--spot),transparent 70%)}
+/* Brilho que segue o mouse: um círculo fixo de 920px movido só por transform (o JS atualiza a posição).
+   will-change porque é uma área grande: na própria camada, mover não redesenha o hero. */
+.hero__spot{position:absolute;left:0;top:0;width:920px;height:920px;margin:-460px 0 0 -460px;pointer-events:none;background:radial-gradient(circle closest-side,var(--spot),transparent 70%);transform:translate(70vw,240px);will-change:transform}
 .hero__in{position:relative;display:flex;flex-direction:column;gap:32px;padding-top:clamp(64px,9vw,112px);padding-bottom:clamp(56px,8vw,96px)}
 .chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
 .chips li{font-size:13px;font-weight:500;padding:8px 14px;border-radius:999px;border:1px solid var(--line3);color:var(--soft)}
@@ -109,8 +116,8 @@ h1,h2,h3,p{margin:0}
 .case__media{position:relative;border-radius:24px;overflow:hidden;background:var(--surface2);border:1px solid var(--line2)}
 .case__img{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;color:var(--muted2);font-size:15px;background:radial-gradient(70% 90% at 50% 110%,var(--glow),transparent 70%);transition:transform .6s var(--ease)}
 .case__img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:left top}
-.case__badge{position:absolute;left:20px;top:20px;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;background:var(--accent);color:var(--on-accent)}
-.case__view{position:absolute;right:20px;bottom:20px;font-size:14px;font-weight:600;padding:12px 18px;border-radius:999px;background:var(--text);color:var(--bg);opacity:0;transform:translateY(10px) scale(.9);transition:opacity .35s,transform .35s var(--ease)}
+.case__badge{position:absolute;left:20px;top:20px;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;background:var(--accent);color:var(--on-accent);white-space:nowrap}
+.case__view{position:absolute;right:20px;bottom:20px;font-size:14px;font-weight:600;padding:12px 18px;border-radius:999px;background:var(--text);color:var(--bg);opacity:0;transform:translateY(10px) scale(.9);transition:opacity .2s var(--ease),transform .2s var(--ease)}
 .case:focus-visible .case__view{opacity:1;transform:none}
 @media (hover:none){.case__view{opacity:1;transform:none}}
 .case__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px}
@@ -158,7 +165,9 @@ h1,h2,h3,p{margin:0}
 .stats{flex:1 1 100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:24px}
 .stat{position:relative;padding-top:24px;display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line3)}
 .stat__grow{position:absolute;top:-1px;left:0;right:0;height:2px;background:var(--accent);transform-origin:left}
-.js .stat__grow{transform:scaleX(0);transition:transform 1.4s var(--ease) .2s}
+/* Uma entrada por número: o bloco só aparece e a barra cresce junto, com o mesmo atraso dele */
+.js .stat.rv{transform:none}
+.js .stat__grow{transform:scaleX(0);transition:transform .8s var(--ease);transition-delay:inherit}
 .js .in .stat__grow{transform:scaleX(1)}
 .stat strong{font-family:var(--display);font-weight:700;font-size:56px;letter-spacing:-.03em;color:var(--accent);line-height:1.1}
 .stat span{font-size:15px;color:var(--muted)}
@@ -208,11 +217,16 @@ h1,h2,h3,p{margin:0}
 .footer__legal{font-size:14px;color:var(--muted2)}
 
 /* Animações */
+/* Hero: o título (principal) sobe primeiro e mais; os botões vêm 60ms depois, subindo menos; os chips (decoração) só aparecem */
 @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes rise-sm{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-24px)}}
 @keyframes twinkle{0%,100%{opacity:.25}50%{opacity:1}}
 .rise{animation:rise .6s var(--ease) both}
-.d2{animation-delay:.08s}.d3{animation-delay:.16s}
+.rise--sm{animation-name:rise-sm}
+.fade{animation:fade .6s var(--ease) both}
+.d2{animation-delay:.06s}
 .orb{animation:float 14s ease-in-out infinite}
 .stars{animation:twinkle 5s ease-in-out infinite}
 .stars2{animation:twinkle 7s ease-in-out infinite reverse}
@@ -226,7 +240,7 @@ h1,h2,h3,p{margin:0}
 /* Hover só em quem tem mouse: no toque, o efeito ficaria preso depois do tap */
 @media (hover:hover) and (pointer:fine){
   .btn:hover{translate:0 -2px}
-  .btn--accent:hover{box-shadow:0 10px 30px var(--glow)}
+  .btn--accent:hover::after{opacity:1}
   .link:hover .arr{transform:translateX(4px)}
   .case:hover .case__img{transform:scale(1.05)}
   .case:hover .case__view{opacity:1;transform:none}
@@ -241,6 +255,15 @@ h1,h2,h3,p{margin:0}
   .form{padding:24px}
   .reel{aspect-ratio:4/5}
   .case .case__media{aspect-ratio:4/3 !important}
+  .case__badge{left:12px;top:12px;font-size:12px;padding:6px 12px}
+}
+/* Celular pequeno: o selo fica só com "WhatsApp oficial" e o cabeçalho só com o símbolo, para nada quebrar linha */
+@media (max-width:420px){
+  .case__badge-x{display:none}
+}
+@media (max-width:374px){
+  .brand__txt{display:none}
+  .nav .btn{margin-left:0}
 }
 @media (max-width:980px){
   .flow{grid-template-columns:1fr}
