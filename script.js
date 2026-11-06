@@ -74,13 +74,14 @@
   window.addEventListener('resize', requestTick);
   onScroll();
 
-  // Brilho do hero segue o mouse
+  // Brilho do hero segue o mouse (as variáveis vão só no brilho, para não recalcular o hero inteiro)
   var hero = document.querySelector('.hero');
-  if (hero && canAnimate) {
+  var spot = hero && hero.querySelector('.hero__spot');
+  if (spot && canAnimate) {
     hero.addEventListener('mousemove', function (e) {
       var r = hero.getBoundingClientRect();
-      hero.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-      hero.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      spot.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      spot.style.setProperty('--my', (e.clientY - r.top) + 'px');
     });
   }
 
